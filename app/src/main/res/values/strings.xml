@@ -2,6 +2,6 @@
     <string name="app_name">City Temperature</string>
     <string name="open_weather_map_app_id">b4857a85703ea21a4922732b725ed141</string>
     <string name="distance">%1$s km</string>
-    <string name="temperature">%1$s °C</string>
+    <string name="temperature">%1$s°C</string>
     <string name="title_map">Map</string>
 </resources>

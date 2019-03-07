@@ -7,10 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.citytemperature.R
 import com.example.citytemperature.data.city.model.City
+import com.example.citytemperature.util.Formatter
 import kotlinx.android.synthetic.main.list_item.view.*
-import kotlin.math.roundToInt
 
-class Adapter(val context: Context, val items: List<City>, val presenter: CityListPresenter) : RecyclerView.Adapter<Adapter.ViewHolder>(){
+class Adapter(
+    val context: Context,
+    private val items: List<City>,
+    private val presenter: CityListPresenter,
+    private val formatter: Formatter) : RecyclerView.Adapter<Adapter.ViewHolder>(){
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, p1: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.list_item, viewGroup, false)
@@ -32,11 +36,11 @@ class Adapter(val context: Context, val items: List<City>, val presenter: CityLi
         }
         holder.itemView.distance.text = distance
         val weather = city.weather
-        val temperature = weather?.main?.temp?.roundToInt()?.toString()
+        val temperature = weather?.main?.temp
         holder.itemView.temperature.text = if(temperature == null){
             null
         }else{
-            context.getString(R.string.temperature, temperature)
+            formatter.formatTemperature(temperature)
         }
         holder.itemView.progressBar.visibility = if(weather == null) View.VISIBLE else View.GONE
         if(weather == null){

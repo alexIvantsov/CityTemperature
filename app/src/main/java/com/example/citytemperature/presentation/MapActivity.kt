@@ -6,14 +6,16 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.example.citytemperature.R
 import com.example.citytemperature.data.city.model.City
+import com.example.citytemperature.util.Formatter
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import kotlin.math.roundToInt
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.CameraUpdateFactory
+import dagger.android.AndroidInjection
+import javax.inject.Inject
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -28,7 +30,11 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @Inject
+    lateinit var formatter: Formatter
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
         val mapFragment = supportFragmentManager
@@ -41,22 +47,28 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         val cities = getCities() ?: return
         val positions = ArrayList<LatLng>()
         cities.forEach {
-            val temperature = it.weather?.main?.temp
-            val title = if (temperature == null) {
-                it.name
-            } else {
-                val formattedTemperature = getString(R.string.temperature, temperature.roundToInt().toString())
-                "${it.name} $formattedTemperature"
-            }
-            if (it.lat != null && it.lng != null) {
-                val latLng = LatLng(it.lat.toDouble(), it.lng.toDouble())
-                positions.add(latLng)
-                val markerOptions = MarkerOptions().position(latLng).title(title)
-                val marker = map.addMarker(markerOptions)
-                marker.showInfoWindow()
+            val markerOptions = getMarkerOptions(it)
+            markerOptions?.let {
+                positions.add(markerOptions.position)
+                map.addMarker(markerOptions)
             }
         }
-        zoomMap(map, positions)
+        map.setOnMapLoadedCallback { zoomMap(map, positions) }
+    }
+
+    private fun getMarkerOptions(city: City): MarkerOptions? {
+        val temperature = city.weather?.main?.temp
+        val title = if (temperature == null) {
+            city.name
+        } else {
+            val formattedTemperature = formatter.formatTemperature(temperature)
+            "${city.name} $formattedTemperature"
+        }
+        if (city.lat != null && city.lng != null) {
+            val latLng = LatLng(city.lat.toDouble(), city.lng.toDouble())
+            return MarkerOptions().position(latLng).title(title)
+        }
+        return null
     }
 
     private fun zoomMap(map: GoogleMap, positions: List<LatLng>) {

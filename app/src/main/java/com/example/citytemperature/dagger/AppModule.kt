@@ -9,6 +9,7 @@ import com.example.citytemperature.domain.WeatherRepository
 import dagger.Module
 import dagger.Binds
 import com.example.citytemperature.presentation.MainActivity
+import com.example.citytemperature.presentation.MapActivity
 import dagger.android.ContributesAndroidInjector
 
 @Module
@@ -19,6 +20,9 @@ interface AppModule{
 
     @ContributesAndroidInjector(modules = [MainActivityModule::class])
     fun mainActivityInjector(): MainActivity
+
+    @ContributesAndroidInjector
+    fun mapActivityInjector(): MapActivity
 
     @Binds
     fun cityRepositoryProvider(cityRepositroyImpl: CityRepositoryImpl): CityRepository

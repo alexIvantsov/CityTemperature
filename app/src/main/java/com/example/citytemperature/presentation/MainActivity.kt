@@ -21,6 +21,7 @@ import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.example.citytemperature.util.Formatter
 
 class MainActivity : AppCompatActivity(), PermissionProvider,
     GpsResolutionProvider, CityListScreen {
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity(), PermissionProvider,
     private var permissionObservable: BehaviorSubject<PermissionResult>? = null
 
     @Inject lateinit var presenter: CityListPresenter
+    @Inject lateinit var formatter: Formatter
 
     private lateinit var dividerItemDecoration: DividerItemDecoration
 
@@ -46,7 +48,7 @@ class MainActivity : AppCompatActivity(), PermissionProvider,
     override fun showCities(cities: List<City>){
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.addItemDecoration(dividerItemDecoration)
-        recyclerView.adapter = Adapter(this, cities, presenter)
+        recyclerView.adapter = Adapter(this, cities, presenter, formatter)
     }
 
     override fun cityUpdated(position: Int){
