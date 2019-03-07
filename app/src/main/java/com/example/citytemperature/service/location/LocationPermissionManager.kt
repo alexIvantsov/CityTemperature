@@ -10,8 +10,9 @@ import com.example.citytemperature.service.permission.PermissionResult
 import com.example.citytemperature.service.permission.PermissionStatus
 import com.example.citytemperature.service.permission.PermissionProvider
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class LocationPermissionManager(private val context: Context, private val permissionProvider: PermissionProvider) {
+class LocationPermissionManager @Inject constructor(private val context: Context, private val permissionProvider: PermissionProvider) {
 
     private val permissions =
         arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)

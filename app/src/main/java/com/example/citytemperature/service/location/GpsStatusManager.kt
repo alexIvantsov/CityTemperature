@@ -14,8 +14,9 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsStatusCodes
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import javax.inject.Inject
 
-class GpsStatusManager(val context: Context, val gpsResolutionProvider: GpsResolutionProvider) :
+class GpsStatusManager @Inject constructor(val context: Context, val gpsResolutionProvider: GpsResolutionProvider) :
     GoogleApiClient.ConnectionCallbacks,
     GoogleApiClient.OnConnectionFailedListener {
 

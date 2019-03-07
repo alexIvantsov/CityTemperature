@@ -4,10 +4,12 @@ import com.example.citytemperature.data.city.mapper.CityDataMapper
 import com.example.citytemperature.data.city.model.City
 import com.example.citytemperature.data.city.model.CityListRequestParams
 import io.reactivex.Observable
+import javax.inject.Inject
 
-class InteractorImpl(
+class InteractorImpl @Inject constructor(
     val locationService: LocationService,
     val cityRepository: CityRepository,
+    val weatherRepository: WeatherRepository,
     val mapper: CityDataMapper
 ) : Interactor {
 
@@ -22,7 +24,19 @@ class InteractorImpl(
             .flatMap {
                 Observable
                     .fromIterable(it)
-                    .map{mapper.from(it)}
+                    .map { cityRepository -> mapper.from(cityRepository) }
+                    .flatMap flatMapInner@ { city ->
+                        return@flatMapInner if(city.lat == null || city.lng == null){
+                            Observable.just(city)
+                        }else {
+                            weatherRepository
+                                .getWeather(city.lat, city.lng)
+                                .map {
+                                    city.weather = it
+                                    return@map city
+                                }
+                        }
+                    }
                     .toList()
                     .toObservable()
             }

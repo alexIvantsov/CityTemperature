@@ -5,21 +5,16 @@ import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.example.citytemperature.R
-import com.example.citytemperature.data.city.mapper.CityDataMapper
-import com.example.citytemperature.data.city.network.RequestManager
-import com.example.citytemperature.data.city.repository.CityRepositoryImpl
 import com.example.citytemperature.domain.Interactor
-import com.example.citytemperature.domain.InteractorImpl
 import com.example.citytemperature.service.location.GpsResolutionProvider
-import com.example.citytemperature.service.location.GpsStatusManager
-import com.example.citytemperature.service.location.LocationPermissionManager
-import com.example.citytemperature.service.location.LocationServiceImpl
 import com.example.citytemperature.service.permission.PermissionProvider
 import com.example.citytemperature.service.permission.PermissionResult
 import com.google.android.gms.common.api.Status
+import dagger.android.AndroidInjection
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), PermissionProvider,
     GpsResolutionProvider {
@@ -29,23 +24,26 @@ class MainActivity : AppCompatActivity(), PermissionProvider,
     private var gpsResolutionObservable: BehaviorSubject<Int>? = null
     private var permissionObservable: BehaviorSubject<PermissionResult>? = null
 
+    @Inject lateinit var interactor: Interactor
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val interactor: Interactor =
-            InteractorImpl(
-                LocationServiceImpl(
-                    this,
-                    LocationPermissionManager(this, this),
-                    GpsStatusManager(this, this)
-                ),
-                CityRepositoryImpl(RequestManager().service), CityDataMapper()
-            )
+//        val interactor: Interactor =
+//            InteractorImpl(
+//                LocationServiceImpl(
+//                    this,
+//                    LocationPermissionManager(this, this),
+//                    GpsStatusManager(this, this)
+//                ),
+//                CityRepositoryImpl(CityRequestManager().service), CityDataMapper()
+//            )
         interactor
             .getCityList(20)
             .subscribe({
-                textView.text = it.first().name
+                textView.text = it.first().name+" "+it.first().weather?.main?.temp
             }, { it.printStackTrace() })
 
     }

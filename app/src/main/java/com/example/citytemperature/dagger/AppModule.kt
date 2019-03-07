@@ -1,19 +1,29 @@
 package com.example.citytemperature.dagger
 
 import android.content.Context
-import com.example.citytemperature.data.city.network.RequestManager
+import com.example.citytemperature.CityTemperature
+import com.example.citytemperature.data.city.repository.CityRepositoryImpl
+import com.example.citytemperature.data.weather.repository.WeatherRepositoryImpl
+import com.example.citytemperature.domain.CityRepository
+import com.example.citytemperature.domain.WeatherRepository
 import dagger.Module
-import dagger.Provides
-import javax.inject.Singleton
+import dagger.Binds
+import com.example.citytemperature.presentation.MainActivity
+import dagger.android.ContributesAndroidInjector
 
 @Module
-class AppModule(val context: Context){
+interface AppModule{
 
-    @Provides
-    @Singleton
-    fun provideRequestManager() = RequestManager().service
+    @Binds
+    fun bindContext(application: CityTemperature): Context
 
-    @Provides
-    @Singleton
-    fun provideContext() = context
+    @ContributesAndroidInjector(modules = [MainActivityModule::class])
+    fun mainActivityInjector(): MainActivity
+
+    @Binds
+    fun cityRepositoryProvider(cityRepositroyImpl: CityRepositoryImpl): CityRepository
+
+    @Binds
+    fun weatherRepositoryProvider(weatherRepository: WeatherRepositoryImpl): WeatherRepository
+
 }

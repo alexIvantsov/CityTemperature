@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">City Temperature</string>
+    <string name="open_weather_map_app_id">b4857a85703ea21a4922732b725ed141</string>
 </resources>

@@ -9,8 +9,9 @@ import org.simpleframework.xml.convert.AnnotationStrategy
 import org.simpleframework.xml.core.Persister
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import javax.inject.Inject
 
-class RequestManager {
+class CityRequestManager @Inject constructor(){
 
     val service: CityRequestService
 

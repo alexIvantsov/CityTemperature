@@ -7,9 +7,10 @@ import com.example.citytemperature.domain.LocationService
 import io.reactivex.Observable
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import com.google.android.gms.location.LocationRequest
+import javax.inject.Inject
 
 
-class LocationServiceImpl(
+class LocationServiceImpl @Inject constructor(
     context: Context,
     private val permissionManager: LocationPermissionManager,
     private val gpsSwitchManager: GpsStatusManager
