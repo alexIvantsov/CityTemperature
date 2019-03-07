@@ -27,7 +27,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.MapActivity"/>
+        <activity android:name=".presentation.MapActivity"
+                  android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
     </application>
 

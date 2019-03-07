@@ -66,15 +66,14 @@ class MainActivity : AppCompatActivity(), PermissionProvider,
         val id = item?.itemId
         if(id != null){
             when(id){
-                R.id.action_map -> openMap()
+                R.id.action_map -> presenter.openMapClicked()
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun openMap(){
-        val intent = Intent(this, MapActivity::class.java)
-        startActivity(intent)
+    override fun showCitiesOnMap(cities: ArrayList<City>){
+        MapActivity.startActivity(this, cities)
     }
 
     override fun requestPermission(permissions: Array<String>): Observable<PermissionResult> {

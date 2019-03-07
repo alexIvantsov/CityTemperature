@@ -13,13 +13,15 @@ class CityListPresenter @Inject constructor(
 
     var radius = 20
     private val compositeDisposable = CompositeDisposable()
+    private var cities: List<City>? = null
 
     fun init(){
         screen.showProgressBar(true)
         compositeDisposable.add(interactor
             .getCityList(radius)
             .subscribe({
-                screen.showCities(it)
+                cities = it
+                screen.showCities(cities!!)
                 screen.showProgressBar(false)
             }, {
                 screen.showProgressBar(false)
@@ -38,6 +40,12 @@ class CityListPresenter @Inject constructor(
             .map { city.weather = it }
             .subscribe({screen.cityUpdated(position)}, {})
         )
+    }
+
+    fun openMapClicked() {
+        if(cities != null){
+            screen.showCitiesOnMap(ArrayList(cities))
+        }
     }
 
     fun destroy(){

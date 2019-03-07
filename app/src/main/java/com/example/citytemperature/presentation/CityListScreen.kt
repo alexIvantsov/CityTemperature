@@ -7,4 +7,5 @@ interface CityListScreen{
     fun showCities(cities: List<City>)
     fun cityUpdated(position: Int)
     fun showProgressBar(isShow: Boolean)
+    fun showCitiesOnMap(cities: ArrayList<City>)
 }
