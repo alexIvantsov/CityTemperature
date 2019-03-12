@@ -25,6 +25,10 @@ class Adapter(
         return items.size
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val city = items[position]
         holder.itemView.cityName.text = city.name

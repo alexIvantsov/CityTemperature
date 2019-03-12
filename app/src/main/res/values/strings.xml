@@ -4,4 +4,12 @@
     <string name="distance">%1$s km</string>
     <string name="temperature">%1$s°C</string>
     <string name="title_map">Map</string>
+    <string name="error_no_internet_connection">No internet connection</string>
+    <string name="error_server">Server error</string>
+    <string name="error_gps_disabled">You have to turn on gps to use app</string>
+    <string name="error_permission_not_granted">You have to get gps permission to use app</string>
+    <string name="error_never_ask_again_selected">You have to get location permissions in app settings to use app
+    </string>
+    <string name="error_gps_unavailable">Device does not have gps</string>
+    <string name="button_retry">Retry</string>
 </resources>
